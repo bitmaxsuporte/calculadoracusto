@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cálculo de Novo Custo Médio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+        .container {
+            width: 90%;
+            max-width: 400px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-size: 14px;
+            text-align: left;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px;
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .clear-btn {
+            background-color: #ff6b6b;
+            margin-top: 10px;
+        }
+        button.clear-btn:hover {
+            background-color: #ff4c4c;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+        .steps {
+            margin-top: 10px;
+            background-color: #eef;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        .steps div {
+            margin: 5px 0;
+        }
+        .formula {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Cálculo de Novo Custo Médio</h2>
+
+        <div class="formula">
+            Fórmula: <br>
+            ((Custo Médio Anterior * Estoque Anterior) + (Custo Atual * Quantidade Comprada)) / Novo Estoque
+        </div>
+
+        <label for="custoMedioAnterior">Custo Médio Anterior:</label>
+        <input type="number" id="custoMedioAnterior" step="0.01" placeholder="Insira o custo médio anterior">
+
+        <label for="estoqueAnterior">Estoque Anterior:</label>
+        <input type="number" id="estoqueAnterior" step="0.01" placeholder="Insira o estoque anterior">
+
+        <label for="custoAtual">Custo Atual:</label>
+        <input type="number" id="custoAtual" step="0.01" placeholder="Insira o custo atual">
+
+        <label for="quantidadeComprada">Quantidade Comprada:</label>
+        <input type="number" id="quantidadeComprada" step="0.01" placeholder="Insira a quantidade comprada">
+
+        <button onclick="calcularCustoMedio()">Calcular Novo Custo Médio</button>
+        <button class="clear-btn" onclick="limparCampos()">Limpar e Refazer</button>
+
+        <div class="result" id="resultado"></div>
+    </div>
+
+    <script>
+        function calcularCustoMedio() {
+            // Pegando os valores dos inputs
+            const custoMedioAnterior = parseFloat(document.getElementById('custoMedioAnterior').value);
+            const estoqueAnterior = parseFloat(document.getElementById('estoqueAnterior').value);
+            const custoAtual = parseFloat(document.getElementById('custoAtual').value);
+            const quantidadeComprada = parseFloat(document.getElementById('quantidadeComprada').value);
+
+            // Verificando se todos os valores foram preenchidos
+            if (isNaN(custoMedioAnterior) || isNaN(estoqueAnterior) || isNaN(custoAtual) || isNaN(quantidadeComprada)) {
+                document.getElementById('resultado').innerHTML = "Por favor, preencha todos os campos corretamente.";
+                return;
+            }
+
+            // Calculando o novo estoque
+            const novoEstoque = estoqueAnterior + quantidadeComprada;
+
+            // Exibindo o cálculo passo a passo
+            const passo1 = `(Custo Médio Anterior * Estoque Anterior) = (${custoMedioAnterior} * ${estoqueAnterior}) = ${(custoMedioAnterior * estoqueAnterior).toFixed(2)}`;
+            const passo2 = `(Custo Atual * Quantidade Comprada) = (${custoAtual} * ${quantidadeComprada}) = ${(custoAtual * quantidadeComprada).toFixed(2)}`;
+            const passo3 = `Somando os resultados: ${(custoMedioAnterior * estoqueAnterior).toFixed(2)} + ${(custoAtual * quantidadeComprada).toFixed(2)} = ${((custoMedioAnterior * estoqueAnterior) + (custoAtual * quantidadeComprada)).toFixed(2)}`;
+            const passo4 = `Dividindo pelo novo estoque: ${((custoMedioAnterior * estoqueAnterior) + (custoAtual * quantidadeComprada)).toFixed(2)} / ${novoEstoque.toFixed(2)} = ${( ((custoMedioAnterior * estoqueAnterior) + (custoAtual * quantidadeComprada)) / novoEstoque ).toFixed(2)}`;
+
+            // Calculando o novo custo médio
+            const novoCustoMedio = ((custoMedioAnterior * estoqueAnterior) + (custoAtual * quantidadeComprada)) / novoEstoque;
+
+            // Exibindo os cálculos e o resultado
+            document.getElementById('resultado').innerHTML = `
+                <div class="steps">
+                    <div><strong>Passo 1:</strong> ${passo1}</div>
+                    <div><strong>Passo 2:</strong> ${passo2}</div>
+                    <div><strong>Passo 3:</strong> ${passo3}</div>
+                    <div><strong>Passo 4:</strong> ${passo4}</div>
+                </div>
+                <div><strong>O novo custo médio é: R$ ${novoCustoMedio.toFixed(2)}</strong></div>
+            `;
+        }
+
+        // Função para limpar os campos e o resultado
+        function limparCampos() {
+            document.getElementById('custoMedioAnterior').value = '';
+            document.getElementById('estoqueAnterior').value = '';
+            document.getElementById('custoAtual').value = '';
+            document.getElementById('quantidadeComprada').value = '';
+            document.getElementById('resultado').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
